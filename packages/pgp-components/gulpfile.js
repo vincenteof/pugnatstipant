@@ -1,5 +1,10 @@
 const gulp = require('gulp')
 const babel = require('gulp-babel')
+const sass = require('gulp-sass')
+const autoprefixer = require('gulp-autoprefixer')
+const cssnano = require('gulp-cssnano')
+
+sass.compiler = require('node-sass')
 
 const paths = {
   dest: {
@@ -7,6 +12,7 @@ const paths = {
     esm: 'esm', // ES module
     dist: 'dist', // UMD
   },
+  styles: 'src/**/*.scss',
   scripts: ['src/**/*.{ts,tsx}'],
 }
 
@@ -26,8 +32,25 @@ function compileESM() {
   return compileScripts('esm', dest.esm)
 }
 
+function copyScss() {
+  return gulp
+    .src(paths.styles)
+    .pipe(gulp.dest(paths.dest.lib))
+    .pipe(gulp.dest(paths.dest.esm))
+}
+
+function scss2Css() {
+  return gulp
+    .src(paths.styles)
+    .pipe(sass())
+    .pipe(autoprefixer())
+    .pipe(cssnano({ zindex: false, reduceIdents: false }))
+    .pipe(gulp.dest(paths.dest.lib))
+    .pipe(gulp.dest(paths.dest.esm))
+}
+
 const buildScripts = gulp.series(compileCJS, compileESM)
-const build = gulp.parallel(buildScripts)
+const build = gulp.parallel(buildScripts, copyScss, scss2Css)
 
 exports.build = build
 exports.default = build
