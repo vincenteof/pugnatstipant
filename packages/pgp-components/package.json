@@ -1,7 +1,7 @@
 {
-  "name": "utils",
+  "name": "pgp-components",
   "version": "0.0.1",
-  "description": "util functions",
+  "description": "react components",
   "main": "index.js",
   "author": "vincenteof",
   "license": "MIT"

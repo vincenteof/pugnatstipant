@@ -1,8 +1,0 @@
-{
-  "name": "hooks",
-  "version": "0.0.1",
-  "description": "react hooks",
-  "main": "index.js",
-  "author": "vincenteof",
-  "license": "MIT"
-}
