@@ -10,12 +10,24 @@ const paths = {
   scripts: ['src/**/*.{ts,tsx}'],
 }
 
-function compileCJS() {
-  const { dest, scripts } = paths
-  return gulp.src(scripts).pipe(babel()).pipe(gulp.dest(dest.lib))
+function compileScripts(babelEnv, destDir) {
+  const { scripts } = paths
+  process.env.BABEL_ENV = babelEnv
+  return gulp.src(scripts).pipe(babel()).pipe(gulp.dest(destDir))
 }
 
-const build = gulp.parallel(compileCJS)
+function compileCJS() {
+  const { dest } = paths
+  return compileScripts('cjs', dest.lib)
+}
+
+function compileESM() {
+  const { dest } = paths
+  return compileScripts('esm', dest.esm)
+}
+
+const buildScripts = gulp.series(compileCJS, compileESM)
+const build = gulp.parallel(buildScripts)
 
 exports.build = build
 exports.default = build

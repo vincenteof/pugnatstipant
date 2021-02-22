@@ -1,12 +1,10 @@
 module.exports = function (api) {
-  api.cache(true)
+  api.cache(false)
   const presets = [
     [
       '@babel/preset-env',
       {
-        targets: {
-          browsers: ['> 0.25%'],
-        },
+        modules: process.env.BABEL_ENV === 'esm' ? false : 'auto',
       },
     ],
     '@babel/preset-typescript',
@@ -15,9 +13,14 @@ module.exports = function (api) {
   // We don't use any polyfill.
   // Instead we let the use to do it to avoid duplicating.
   const plugins = [
-    '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
+    [
+      '@babel/plugin-transform-runtime',
+      {
+        useESModules: process.env.BABEL_ENV === 'esm',
+      },
+    ],
   ]
   return {
     presets,
