@@ -74,6 +74,8 @@ function scss2Css() {
     .pipe(gulp.dest(paths.dest.esm))
 }
 
+// todo: rollup for umd build with a full css file
+
 const buildScripts = gulp.series(compileCJS, compileESM)
 const build = gulp.parallel(buildScripts, copyScss, scss2Css)
 
